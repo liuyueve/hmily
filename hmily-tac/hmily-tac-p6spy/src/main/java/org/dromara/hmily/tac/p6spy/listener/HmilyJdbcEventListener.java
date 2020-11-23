@@ -21,17 +21,25 @@ import com.p6spy.engine.common.CallableStatementInformation;
 import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.common.PreparedStatementInformation;
 import com.p6spy.engine.common.StatementInformation;
-import com.p6spy.engine.event.JdbcEventListener;
-import java.sql.SQLException;
-import java.util.Objects;
+import com.p6spy.engine.common.Value;
+import com.p6spy.engine.event.SimpleJdbcEventListener;
+import lombok.SneakyThrows;
 import org.dromara.hmily.tac.p6spy.executor.HmilyExecuteTemplate;
+
+import java.lang.reflect.Method;
+import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * The type Hmily jdbc event listener.
  *
  * @author xiaoyu
+ * @author zhaojun
  */
-public class HmilyJdbcEventListener extends JdbcEventListener {
+public class HmilyJdbcEventListener extends SimpleJdbcEventListener {
     
     @Override
     public void onAfterGetConnection(final ConnectionInformation connectionInformation, final SQLException e) {
@@ -42,35 +50,9 @@ public class HmilyJdbcEventListener extends JdbcEventListener {
     }
     
     @Override
-    public void onAfterExecute(final PreparedStatementInformation statementInformation, final long timeElapsedNanos, final SQLException e) {
-        super.onAfterExecute(statementInformation, timeElapsedNanos, e);
-        if (Objects.isNull(e)) {
-            HmilyExecuteTemplate.INSTANCE.execute(statementInformation);
-        }
-    }
-    
-    @Override
-    public void onAfterExecute(final StatementInformation statementInformation, final long timeElapsedNanos, final String sql, final SQLException e) {
-        super.onAfterExecute(statementInformation, timeElapsedNanos, sql, e);
-        if (Objects.isNull(e)) {
-            HmilyExecuteTemplate.INSTANCE.execute(statementInformation);
-        }
-    }
-    
-    @Override
-    public void onAfterExecuteUpdate(final PreparedStatementInformation statementInformation, final long timeElapsedNanos, final int rowCount, final SQLException e) {
-        super.onAfterExecuteUpdate(statementInformation, timeElapsedNanos, rowCount, e);
-        if (Objects.isNull(e)) {
-            HmilyExecuteTemplate.INSTANCE.execute(statementInformation);
-        }
-    }
-    
-    @Override
-    public void onAfterExecuteUpdate(final StatementInformation statementInformation, final long timeElapsedNanos, final String sql, final int rowCount, final SQLException e) {
-        super.onAfterExecuteUpdate(statementInformation, timeElapsedNanos, sql, rowCount, e);
-        if (Objects.isNull(e)) {
-            HmilyExecuteTemplate.INSTANCE.execute(statementInformation);
-        }
+    public void onBeforeAnyExecute(final StatementInformation statementInformation) {
+        super.onBeforeAnyExecute(statementInformation);
+        HmilyExecuteTemplate.INSTANCE.execute(statementInformation.getSql(), getParameters(statementInformation), statementInformation.getConnectionInformation());
     }
     
     @Override
@@ -102,6 +84,22 @@ public class HmilyJdbcEventListener extends JdbcEventListener {
     @Override
     public void onAfterPreparedStatementSet(final PreparedStatementInformation statementInformation, final int parameterIndex, final Object value, final SQLException e) {
         statementInformation.setParameterValue(parameterIndex, value);
+    }
+    
+    @SneakyThrows
+    @SuppressWarnings("unchecked")
+    private List<Object> getParameters(final StatementInformation statementInformation) {
+        List<Object> result = new LinkedList<>();
+        if (!(statementInformation instanceof PreparedStatementInformation)) {
+            return result;
+        }
+        Method method = statementInformation.getClass().getDeclaredMethod("getParameterValues");
+        method.setAccessible(true);
+        Map<Integer, Value> parameterValues = (Map<Integer, Value>) method.invoke(statementInformation);
+        for (int i = 0; i < parameterValues.size(); i++) {
+            result.add(parameterValues.get(i).toString());
+        }
+        return result;
     }
 }
 

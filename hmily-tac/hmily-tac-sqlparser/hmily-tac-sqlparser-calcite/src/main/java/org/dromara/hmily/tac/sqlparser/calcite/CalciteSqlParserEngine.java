@@ -18,7 +18,8 @@
 package org.dromara.hmily.tac.sqlparser.calcite;
 
 import org.dromara.hmily.spi.HmilySPI;
-import org.dromara.hmily.tac.sqlparser.model.statement.SQLStatement;
+import org.dromara.hmily.tac.common.database.type.DatabaseType;
+import org.dromara.hmily.tac.sqlparser.model.statement.HmilyStatement;
 import org.dromara.hmily.tac.sqlparser.spi.HmilySqlParserEngine;
 import org.dromara.hmily.tac.sqlparser.spi.exception.SqlParserException;
 
@@ -31,7 +32,7 @@ import org.dromara.hmily.tac.sqlparser.spi.exception.SqlParserException;
 public class CalciteSqlParserEngine implements HmilySqlParserEngine {
     
     @Override
-    public SQLStatement parser(final String sql, final String databaseType) throws SqlParserException {
+    public HmilyStatement parser(final String sql, final DatabaseType databaseType) throws SqlParserException {
         return null;
     }
 }

@@ -28,11 +28,17 @@
         <img src="https://codecov.io/gh/dromara/hmily/branch/master/graph/badge.svg"/>
     </a>
     <a target="_blank" href='https://gitee.com/shuaiqiyu/hmily/stargazers'>
-        <img src='https://gitee.com/shuaiqiyu/hmily/badge/star.svg?theme=gvp' alt='star'/>
-   </a>
-   <a target="_blank" href='https://github.com/dromara/hmily'>
-        <img src="https://img.shields.io/github/stars/dromara/hmily.svg?style=social" alt="github star"/>
-   </a>
+        <img src='https://gitee.com/shuaiqiyu/hmily/badge/star.svg?theme=gvp' alt='gitee stars'/>
+    </a>
+    <a target="_blank" href='https://github.com/dromara/hmily'>
+        <img src="https://img.shields.io/github/forks/dromara/hmily.svg" alt="github forks"/>
+    </a>
+    <a target="_blank" href='https://github.com/dromara/hmily'>
+        <img src="https://img.shields.io/github/stars/dromara/hmily.svg" alt="github stars"/>
+    </a>
+    <a target="_blank" href='https://github.com/dromara/hmily'>
+        <img src="https://img.shields.io/github/contributors/dromara/hmily.svg" alt="github contributors"/>
+    </a>   
    <a href="https://github.com/Dromara/hmily">
         <img src="https://tokei.rs/b1/github/Dromara/hmily?category=lines"/>
    </a>
@@ -56,7 +62,7 @@
    
    *  可观测性 ：Metrics多项指标性能监控，以及admin管理后台UI展示
    
-   *  多种RPC ： 支持 `Dubbo`, `SpringCloud`,`Montan` 等知名RPC框架
+   *  多种RPC ： 支持 `Dubbo`, `SpringCloud`,`Motan`, `Sofa-rpc`, `brpc`, `tars` 等知名RPC框架
    
    *  日志存储 ： 支持 `mysql`, `oracle`, `mongodb`, `redis`, `zookeeper` 等方式
    
